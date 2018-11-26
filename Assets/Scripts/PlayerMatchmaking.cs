@@ -10,12 +10,17 @@ public class PlayerMatchmaking : NetworkBehaviour {
 	private PlayerController pController;
 	[SerializeField] private GameObject buttonMatchmaking = null;
 	private MatchmakingManager matchManager;
+	private GameManager gameManager;
 
 	void Start(){
-		if (isLocalPlayer) {
+		gameManager = FindObjectOfType<GameManager> ();
+		if (isLocalPlayer && gameManager.IsMultiplayer) {
 			matchManager = FindObjectOfType<MatchmakingManager> ();
 			pController = GetComponent<PlayerController> ();
 			pController.enabled = false;
+		} else if (!gameManager.IsMultiplayer) {
+			buttonMatchmaking.SetActive (false);
+			GetComponent<PlayerMatchmaking> ().enabled = false;
 		} else {
 			buttonMatchmaking.SetActive (false);
 		}

@@ -3,15 +3,17 @@ using UnityEngine.Networking;
 
 public class PlayerController : NetworkBehaviour
 {
+	private Transform cameraTransform;
 	public GameObject bulletPrefab;
 	public Transform bulletSpawn;
 	public float speedMultiplier = 1.0f;
-	public float rotationMultiplier = 1.0f;
 	public float bulletSpeedMultiplier = 1.0f;
 
 	public override void OnStartLocalPlayer()
 	{
+		cameraTransform = FindObjectOfType<MainCameraFollowPlayer> ().transform;
 		GetComponent<MeshRenderer>().material.color = Color.blue;
+		FindObjectOfType<MainCameraFollowPlayer>().ChoosePlayer (transform);
 	}
 
 	void Update()
@@ -21,9 +23,10 @@ public class PlayerController : NetworkBehaviour
 			return;
 		}
 
+		int layerMask = 1 << 9; // cast rays only against colliders in layer 9.
 		RaycastHit hit;
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out hit)){
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask)){
 			Vector3 look = hit.point;
 			look.y = transform.position.y;
 
@@ -37,10 +40,10 @@ public class PlayerController : NetworkBehaviour
 
 		// avoids the player to have a strange behaviour when hitting obstacles
 		if (!Physics.SphereCast (transform.position, 0.49f, new Vector3(x, 0, 0), out hit, Mathf.Abs(x))) {
-			transform.Translate (transform.InverseTransformVector (x, 0, 0));
+			transform.Translate (transform.InverseTransformVector(cameraTransform.right * x));//(transform.InverseTransformVector (x, 0, 0));
 		}
 		if (!Physics.SphereCast (transform.position, 0.49f, new Vector3(0, 0, z), out hit, Mathf.Abs(z))) {
-			transform.Translate (transform.InverseTransformVector (0, 0, z));
+			transform.Translate (transform.InverseTransformVector(cameraTransform.forward * z));// (transform.InverseTransformVector (0, 0, z));
 		}
 
 		if(Input.GetMouseButtonDown(0))

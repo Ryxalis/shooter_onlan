@@ -11,8 +11,6 @@ public class EnemySpawner : NetworkBehaviour {
 	public int numberOfEnemies;
 
 	void Start(){
-		maxX = terrain.localScale.x;
-		maxZ = terrain.localScale.z;
 	}
 
 	//public override void OnStartServer()
@@ -23,6 +21,8 @@ public class EnemySpawner : NetworkBehaviour {
 		int effectiveEnemies = 0;
 		int iter = 0;
 		int maxIter = 1000;
+		maxX = terrain.localScale.x;
+		maxZ = terrain.localScale.z;
 		while(effectiveEnemies < numberOfEnemies && iter < maxIter)
 		{
 			iter++;
