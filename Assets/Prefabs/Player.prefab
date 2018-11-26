@@ -660,7 +660,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1141104632193356, guid: 22c01ec253a61334a8f92ab8c4a47b10,
     type: 2}
   bulletSpawn: {fileID: 4406129659713336}
-  speedMultiplier: 2
+  speedMultiplier: 5
   bulletSpeedMultiplier: 5
 --- !u!136 &136393260577928806
 CapsuleCollider:
